@@ -1,0 +1,10 @@
+{
+  "name": "novamarket-ecommerce-backend",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "mongoose": "^9.10.1"
+  }
+}
