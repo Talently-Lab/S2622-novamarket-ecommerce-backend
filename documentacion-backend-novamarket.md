@@ -2,7 +2,49 @@
 
 > Registro de tareas, cambios y problemas resueltos durante el desarrollo del backend.
 > Cada entrada corresponde a una sesión de trabajo. Agregar las nuevas arriba de las anteriores (orden cronológico inverso) o abajo, según prefiera el equipo.
+## Sesión: 15/09/2026
 
+### Objetivo
+Crear repositorio en github con las carpetas tal cual en el esquema acordado en jira.
+
+**1. ir a la carpeta del proyecto**
+```bash
+cd /c/Users/ariel/Links/Desktop/S2622-novamarket-ecommerce-backend
+```
+
+**2. inicializar git**
+```bash
+git init
+```
+**3. agregar los archivos**
+```bash
+git add
+```
+**4. hacer el commit**
+```bash
+git commit -m  "Primer commit"
+```
+
+**5. unificar repositorio remoto con el subido a github**
+```bash
+git push -u origin main
+```
+## Probema encontrados y solucion
+
+problema : invalid username or token
+solucion : ir a settings en github -> a personal tokens -> tokens classic -> Generate new token
+
+**6. unificar repositorio remoto con el subido a github**
+```bash
+git pull origin main --allow-unrelated-histories
+git add .
+git commit -m "merge con repo remoto"
+git push -u origin main
+```
+### Estado actual
+_🟢 **Completado** 
+### Pendientes para la próxima sesión
+Conectar el backend (Node.js + Express) a la base de datos MongoDB Atlas, para luego empezar a definir los modelos de datos (schemas) del proyecto.
 ---
 
 ## Sesión: 19/09/2026
