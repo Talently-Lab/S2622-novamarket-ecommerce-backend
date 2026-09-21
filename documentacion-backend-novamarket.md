@@ -168,8 +168,8 @@ _🟢 **Completado**
 - [12] **Responderle a Francisco**: confirmarle que el precio histórico ya estaba cubierto (`precioUnitario`) y que se sumaron `fechaCreacion`/`fechaActualizacion` al carrito para la tasa de abandono
 - [13] **Avisarle a la PM** que la conexión ya está resuelta 
 
-Plantilla 
-## Sesión: DD/MM/AAAA
+ 
+ ## Sesión: DD/MM/AAAA (Plantilla)
 
 ### Objetivo
 _(Qué se buscaba lograr en esta sesión)_
