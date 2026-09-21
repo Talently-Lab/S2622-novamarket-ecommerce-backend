@@ -1,7 +1,6 @@
 # Documentación técnica — S2622 Novamarket E-commerce Backend
 
 > Registro de tareas, cambios y problemas resueltos durante el desarrollo del backend.
-> Cada entrada corresponde a una sesión de trabajo. Agregar las nuevas arriba de las anteriores (orden cronológico inverso) o abajo, según prefiera el equipo.
 ## Sesión: 15/09/2026
 
 ### Objetivo
@@ -32,6 +31,8 @@ git push -u origin main
 ## Probema encontrados y solucion
 
 problema : invalid username or token
+
+
 solucion : ir a settings en github -> a personal tokens -> tokens classic -> Generate new token
 
 **6. unificar repositorio remoto con el subido a github**
@@ -134,7 +135,40 @@ Se agregó en `package.json`:
 - Una vez conectada la base, comenzar a definir los modelos en `src/models/` (Product, User, Order, etc.).
 
 ---
+## Sesión: 20/09/2026
 
+### Objetivo
+Conexion con MongoDB
+
+### Cambios realizados
+Primero pase al modo sin SRV que la estructura es la siguiente:
+mongodb://arielgonzalezmaillard_db_user:<db_password>@ac-yylonhv-shard-00-00.jpixuum.mongodb.net:27017,ac-yylonhv-shard-00-01.jpixuum.mongodb.net:27017,ac-yylonhv-shard-00-02.jpixuum.mongodb.net:27017/?ssl=true&replicaSet=atlas-hiv50b-shard-0&authSource=admin&appName=novamarket-cluster
+
+### Problemas encontrados y solución
+| # | Problema | Causa | Solución |
+|---|----------|-------|----------|
+| 1 | `❌ Error al conectar a MongoDB: bad auth : authentication failed | no sacar los "<>" de la contraseña| Sacar los "<>" ahora dice : Servidor corriendo en puerto 3000
+✅ Conectado a MongoDB |
+
+### Estado actual
+_🟢 **Completado** 
+
+### Pendientes para la próxima sesión
+- [1] **Schema `users`**: modificar `carrito` para que sea `{ items: [...], fechaCreacion, fechaActualizacion }` en vez de array suelto
+- [2] **Schema `users`**: agregar `{ timestamps: true }` al userSchema (da `createdAt` = fecha_registro)
+- [3] **Schema `orders`**: agregar campo `fechaInicioCarrito` (Date, default null)
+- [4] **Schema `orders`**: agregar `{ timestamps: true }` al orderSchema (da `createdAt` = fecha_pedido)
+- [5] **Nuevo modelo `CartEvent`**: crear `models/CartEvent.js` con `userId`, `tipo` (enum: creado/checkout), `fecha`
+- [6] **Controller `POST /api/cart`**: cuando el carrito pasa de vacío a tener 1er ítem, setear `fechaCreacion` + crear `CartEvent` tipo `creado`
+- [7] **Controllers `PUT /PATCH /DELETE /api/cart/:id`**: actualizar `fechaActualizacion` en cada modificación
+- [8] **Controller `POST /api/checkout`**: guardar `fechaInicioCarrito` en la orden nueva, crear `CartEvent` tipo `checkout` (antes de vaciar el carrito), y resetear `carrito.fechaCreacion` a null al vaciar
+- [9] **Probar endpoints contra la base real** (Postman/Thunder Client), en este orden: registro → login → CRUD productos → carrito (agregar/editar/vaciar) → checkout → verificar que la orden quedó con snapshot de precio y `fechaInicioCarrito`
+- [10] **Verificar que las colecciones se crean solas** en Atlas a medida que se prueban los endpoints (users, products, orders, cartevents)
+- [11] **Query de prueba**: correr a mano el `aggregate` de tasa de abandono y tiempo promedio en checkout (los que armamos), aunque sea con 2-3 datos de prueba, para confirmar que las fechas se están guardando bien
+- [12] **Responderle a Francisco**: confirmarle que el precio histórico ya estaba cubierto (`precioUnitario`) y que se sumaron `fechaCreacion`/`fechaActualizacion` al carrito para la tasa de abandono
+- [13] **Avisarle a la PM** que la conexión ya está resuelta 
+
+Plantilla 
 ## Sesión: DD/MM/AAAA
 
 ### Objetivo
