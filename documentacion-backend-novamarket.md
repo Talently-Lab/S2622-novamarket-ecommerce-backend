@@ -147,8 +147,7 @@ mongodb://arielgonzalezmaillard_db_user:<db_password>@ac-yylonhv-shard-00-00.jpi
 ### Problemas encontrados y solución
 | # | Problema | Causa | Solución |
 |---|----------|-------|----------|
-| 1 | `❌ Error al conectar a MongoDB: bad auth : authentication failed | no sacar los "<>" de la contraseña| Sacar los "<>" ahora dice : Servidor corriendo en puerto 3000
-✅ Conectado a MongoDB |
+|1| `❌ Error al conectar a MongoDB: bad auth : authentication failed | no sacar los "<>" de la contraseña| Sacar los "<>" ahora dice :✅ Conectado a MongoDB |
 
 ### Estado actual
 _🟢 **Completado** 
