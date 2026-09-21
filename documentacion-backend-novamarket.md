@@ -167,7 +167,183 @@ _🟢 **Completado**
 - [12] **Responderle a Francisco**: confirmarle que el precio histórico ya estaba cubierto (`precioUnitario`) y que se sumaron `fechaCreacion`/`fechaActualizacion` al carrito para la tasa de abandono
 - [13] **Avisarle a la PM** que la conexión ya está resuelta 
 
- 
+  ## Sesión: 21/09/2026 
+
+### Objetivo
+_Creacion shcema users , orders y cartEvent_
+
+### Cambios realizados
+_Creacion de models/User.js , models/Product.js ,models/order.js y models/cartEvent.js_
+
+en la carpeta models defino el JSON con lo que se definio del documento de Word Novamarket_Arquitectura_BD
+## Product.js
+```js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+const productSchema = new Schema({
+  nombre: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  descripcion: {
+    type: String
+  },
+  precio: {
+    type: Number,
+    required: true,
+    min: [0, "El campo 'precio' debe ser mayor a 0"]
+  },
+  stock: {
+    type: Number,
+    required: true,
+    default: 0,
+    min: [0, "El stock no puede ser negativo"]
+  },
+  categoria: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  imagenUrl: {
+    type: String
+  }
+}, {
+  timestamps: true   // genera createdAt y updatedAt automático
+});
+
+module.exports = mongoose.model('Product', productSchema);
+
+```
+
+##  Order.js
+
+```js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+const orderSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  items: [
+    {
+      productId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product'
+      },
+      nombre: {
+        type: String,
+        required: true,
+        trim: true
+      },
+      precioHistorico: {
+        type: Number,
+        required: true
+      },
+      cantidad: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
+  total: {
+    type: Number,
+    required: true
+  },
+  estado: {
+    type: String,
+    enum: ['pendiente', 'pagado', 'enviado', 'entregado', 'cancelado'],
+    default: 'pendiente'
+  },
+  fechaInicioCarrito: {
+    type: Date,
+    default: null
+  }
+}, {
+  timestamps: true
+});
+
+module.exports = mongoose.model('Order', orderSchema);
+
+
+```
+## User.js
+```js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+const userSchema = new Schema({
+  nombre: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  rol: {
+    type: String,
+    enum: ['cliente', 'admin'],
+    default: 'cliente'
+  },
+  carrito: {
+    items: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: 'Product'
+        },
+        cantidad: {
+          type: Number,
+          default: 1
+        }
+      }
+    ],
+    fechaCreacion: {
+      type: Date,
+      default: null
+    },
+    fechaActualizacion: {
+      type: Date,
+      default: null
+    }
+  }
+}, {
+  timestamps: true
+});
+
+module.exports = mongoose.model('User', userSchema);
+
+```
+### Problemas encontrados y solución
+| # | Problema | Causa | Solución |
+|---|----------|-------|----------|
+| | | | |
+
+### Estado actual
+_ 🟡 En progreso _
+
+### Pendientes para la próxima sesión
+- - [1] **Controller `POST /api/cart`**: cuando el carrito pasa de vacío a tener 1er ítem, setear `fechaCreacion` + crear `CartEvent` tipo `creado`
+- [2] **Controllers `PUT /PATCH /DELETE /api/cart/:id`**: actualizar `fechaActualizacion` en cada modificación
+- [3] **Controller `POST /api/checkout`**: guardar `fechaInicioCarrito` en la orden nueva, crear `CartEvent` tipo `checkout` (antes de vaciar el carrito), y resetear `carrito.fechaCreacion` a null al vaciar
+- [4] **Probar endpoints contra la base real** (Postman/Thunder Client), en este orden: registro → login → CRUD productos → carrito (agregar/editar/vaciar) → checkout → verificar que la orden quedó con snapshot de precio y `fechaInicioCarrito`
+- [5] **Verificar que las colecciones se crean solas** en Atlas a medida que se prueban los endpoints (users, products, orders, cartevents)
+- [6] **Query de prueba**: correr a mano el `aggregate` de tasa de abandono y tiempo promedio en checkout (los que armamos), aunque sea con 2-3 datos de prueba, para confirmar que las fechas se están guardando bien
+- [7] *Creacion de rutasRutas* : authRoutes.js ,productRoutes.js,cartRoutes.js,orderRoutes.js
+
+
  ## Sesión: DD/MM/AAAA (Plantilla)
 
 ### Objetivo
