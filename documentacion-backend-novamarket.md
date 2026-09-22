@@ -326,6 +326,30 @@ const userSchema = new Schema({
 module.exports = mongoose.model('User', userSchema);
 
 ```
+## CartEvent.js
+```js
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+const cartEventSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  tipo: {
+    type: String,
+    enum: ['creado', 'checkout'],
+    required: true
+  },
+  fecha: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+module.exports = mongoose.model('CartEvent', cartEventSchema);
+```
 ### Problemas encontrados y solución
 | # | Problema | Causa | Solución |
 |---|----------|-------|----------|
@@ -335,13 +359,15 @@ module.exports = mongoose.model('User', userSchema);
 _ 🟡 En progreso _
 
 ### Pendientes para la próxima sesión
-- - [1] **Controller `POST /api/cart`**: cuando el carrito pasa de vacío a tener 1er ítem, setear `fechaCreacion` + crear `CartEvent` tipo `creado`
-- [2] **Controllers `PUT /PATCH /DELETE /api/cart/:id`**: actualizar `fechaActualizacion` en cada modificación
-- [3] **Controller `POST /api/checkout`**: guardar `fechaInicioCarrito` en la orden nueva, crear `CartEvent` tipo `checkout` (antes de vaciar el carrito), y resetear `carrito.fechaCreacion` a null al vaciar
-- [4] **Probar endpoints contra la base real** (Postman/Thunder Client), en este orden: registro → login → CRUD productos → carrito (agregar/editar/vaciar) → checkout → verificar que la orden quedó con snapshot de precio y `fechaInicioCarrito`
-- [5] **Verificar que las colecciones se crean solas** en Atlas a medida que se prueban los endpoints (users, products, orders, cartevents)
-- [6] **Query de prueba**: correr a mano el `aggregate` de tasa de abandono y tiempo promedio en checkout (los que armamos), aunque sea con 2-3 datos de prueba, para confirmar que las fechas se están guardando bien
-- [7] *Creacion de rutasRutas* : authRoutes.js ,productRoutes.js,cartRoutes.js,orderRoutes.js
+-[1] Creacion de carpeta Controllers junto a sus archivos authcontroller.js , cartcontroller.js ,ordercontroller.js y productcontroller.js
+-[2]Creacion de carpeta Routes junto a sus archivos authRoutes.js , cartRoutes.js ,orderRoutes.js y productRoutes.js
+ - [3] **Controller `POST /api/cart`**: cuando el carrito pasa de vacío a tener 1er ítem, setear `fechaCreacion` + crear `CartEvent` tipo `creado`
+- [4] **Controllers `PUT /PATCH /DELETE /api/cart/:id`**: actualizar `fechaActualizacion` en cada modificación
+- [5] **Controller `POST /api/checkout`**: guardar `fechaInicioCarrito` en la orden nueva, crear `CartEvent` tipo `checkout` (antes de vaciar el carrito), y resetear `carrito.fechaCreacion` a null al vaciar
+- [6] **Probar endpoints contra la base real** (Postman/Thunder Client), en este orden: registro → login → CRUD productos → carrito (agregar/editar/vaciar) → checkout → verificar que la orden quedó con snapshot de precio y `fechaInicioCarrito`
+- [7] **Verificar que las colecciones se crean solas** en Atlas a medida que se prueban los endpoints (users, products, orders, cartevents)
+- [8] **Query de prueba**: correr a mano el `aggregate` de tasa de abandono y tiempo promedio en checkout (los que armamos), aunque sea con 2-3 datos de prueba, para confirmar que las fechas se están guardando bien
+- [9] *Creacion de rutasRutas* : authRoutes.js ,productRoutes.js,cartRoutes.js,orderRoutes.js
 
 
  ## Sesión: DD/MM/AAAA (Plantilla)
